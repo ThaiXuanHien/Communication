@@ -1,6 +1,5 @@
 package com.hienthai.communication;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +10,12 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 public class FragmentOne extends Fragment {
 
-    private FragmentOneListener fragmentOneListener;
-
+    //private FragmentOneListener fragmentOneListener;
+    SharedViewModel viewModel;
     EditText edtFrmOne;
     Button btnFrmOne;
 
@@ -28,36 +28,48 @@ public class FragmentOne extends Fragment {
         btnFrmOne = view.findViewById(R.id.btnFrmOne);
 
         btnFrmOne.setOnClickListener(v -> {
-            CharSequence input = edtFrmOne.getText();
-            fragmentOneListener.onInputFrmOneSent(input);
+//            CharSequence input = edtFrmOne.getText();
+//            fragmentOneListener.onInputFrmOneSent(input);
+
+            viewModel.setText(edtFrmOne.getText());
         });
 
         return view;
     }
 
-    public void updateEditText(CharSequence newText) {
-        edtFrmOne.setText(newText);
-    }
-
-    public interface FragmentOneListener {
-        void onInputFrmOneSent(CharSequence input);
-    }
-
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        if (context instanceof FragmentOneListener) {
-            fragmentOneListener = (FragmentOneListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement FragmentOneListener");
-        }
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        viewModel.getText().observe(getViewLifecycleOwner(), charSequence -> {
+            edtFrmOne.setText(charSequence);
+        });
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        fragmentOneListener = null;
-    }
+    //    public void updateEditText(CharSequence newText) {
+//        edtFrmOne.setText(newText);
+//    }
+//
+//    public interface FragmentOneListener {
+//        void onInputFrmOneSent(CharSequence input);
+//    }
+//
+//    @Override
+//    public void onAttach(@NonNull Context context) {
+//        super.onAttach(context);
+//
+//        if (context instanceof FragmentOneListener) {
+//            fragmentOneListener = (FragmentOneListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString() + " must implement FragmentOneListener");
+//        }
+//    }
+//
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+//
+//        fragmentOneListener = null;
+//    }
 }

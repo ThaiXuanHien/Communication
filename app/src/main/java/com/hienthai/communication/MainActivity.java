@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements FragmentOne.FragmentOneListener, FragmentTwo.FragmentTwoListener {
+public class MainActivity extends AppCompatActivity /*implements FragmentOne.FragmentOneListener, FragmentTwo.FragmentTwoListener*/ {
 
     private FragmentOne fragmentOne;
     private FragmentTwo fragmentTwo;
@@ -26,13 +26,13 @@ public class MainActivity extends AppCompatActivity implements FragmentOne.Fragm
 
     }
 
-    @Override
-    public void onInputFrmOneSent(CharSequence input) {
-        fragmentTwo.updateEditText(input);
-    }
-
-    @Override
-    public void onInputFrmTwoSent(CharSequence input) {
-        fragmentOne.updateEditText(input);
-    }
+//    @Override
+//    public void onInputFrmOneSent(CharSequence input) {
+//        fragmentTwo.updateEditText(input);
+//    }
+//
+//    @Override
+//    public void onInputFrmTwoSent(CharSequence input) {
+//        fragmentOne.updateEditText(input);
+//    }
 }

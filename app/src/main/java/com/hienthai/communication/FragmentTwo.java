@@ -11,11 +11,11 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 public class FragmentTwo extends Fragment {
 
-    private FragmentTwoListener fragmentTwoListener;
-
+    SharedViewModel viewModel;
     EditText edtFrmTwo;
     Button btnFrmTwo;
 
@@ -28,36 +28,47 @@ public class FragmentTwo extends Fragment {
         btnFrmTwo = view.findViewById(R.id.btnFrmTwo);
 
         btnFrmTwo.setOnClickListener(v -> {
-            CharSequence input = edtFrmTwo.getText();
-            fragmentTwoListener.onInputFrmTwoSent(input);
+//            CharSequence input = edtFrmTwo.getText();
+//            fragmentTwoListener.onInputFrmTwoSent(input);
+            viewModel.setText(edtFrmTwo.getText());
         });
 
         return view;
     }
 
-    public void updateEditText(CharSequence newText) {
-        edtFrmTwo.setText(newText);
-    }
-
-    public interface FragmentTwoListener {
-        void onInputFrmTwoSent(CharSequence input);
-    }
-
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        if (context instanceof FragmentTwoListener) {
-            fragmentTwoListener = (FragmentTwoListener) context;
-        } else {
-            throw new RuntimeException(context.toString() + " must implement FragmentTwoListener");
-        }
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        viewModel.getText().observe(getViewLifecycleOwner(), charSequence -> {
+            edtFrmTwo.setText(charSequence);
+        });
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-        fragmentTwoListener = null;
-    }
+//    public void updateEditText(CharSequence newText) {
+//        edtFrmTwo.setText(newText);
+//    }
+//
+//    public interface FragmentTwoListener {
+//        void onInputFrmTwoSent(CharSequence input);
+//    }
+//
+//    @Override
+//    public void onAttach(@NonNull Context context) {
+//        super.onAttach(context);
+//
+//        if (context instanceof FragmentTwoListener) {
+//            fragmentTwoListener = (FragmentTwoListener) context;
+//        } else {
+//            throw new RuntimeException(context.toString() + " must implement FragmentTwoListener");
+//        }
+//    }
+//
+//    @Override
+//    public void onDetach() {
+//        super.onDetach();
+//
+//        fragmentTwoListener = null;
+//    }
 }
